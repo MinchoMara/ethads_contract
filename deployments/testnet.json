@@ -1,0 +1,929 @@
+{
+  "name": "testnet",
+  "chainId": "421614",
+  "contracts": {
+    "AdManager": {
+      "address": "0xb2f459263E8Ed5F2E6b0bf65fFf3c614126C9363",
+      "abi": [
+        {
+          "inputs": [],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "adId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "clientAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "clientIpfs",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "startTime",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "guaranteeTime",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "expireTime",
+              "type": "uint256"
+            }
+          ],
+          "name": "AdPurchased",
+          "type": "event"
+        },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "adId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "publisher",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "ipfs",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "project",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "network",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "location",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "x_size",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "y_size",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "mindate",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "maxdate",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "dau",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "minprice",
+              "type": "uint256"
+            }
+          ],
+          "name": "AdRegistered",
+          "type": "event"
+        },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "adId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "clientAddress",
+              "type": "address"
+            }
+          ],
+          "name": "ClientAllowed",
+          "type": "event"
+        },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "adId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "clientAddress",
+              "type": "address"
+            }
+          ],
+          "name": "ClientDenied",
+          "type": "event"
+        },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "adId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "clientIpfs",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "clientProject",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "clientDescription",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "paidETH",
+              "type": "uint256"
+            }
+          ],
+          "name": "ClientRegistered",
+          "type": "event"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "name": "adOn",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "adId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "clientAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "clientIpfs",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "adPrice",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "startTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "guaranteeTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "expireTime",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "name": "ads",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "adId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "publisherAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "publisherIpfs",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "publisherProject",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "network",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "location",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "x_size",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "y_size",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "mindate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "maxdate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dau",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "minprice",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_adId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "_clientAddress",
+              "type": "address"
+            }
+          ],
+          "name": "allowAd",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_adId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "_clientAddress",
+              "type": "address"
+            }
+          ],
+          "name": "allowOverAd",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "name": "clientList",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "adId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "clientAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "clientIpfs",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "clientProject",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "clientDescription",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "paidETH",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_adId",
+              "type": "uint256"
+            }
+          ],
+          "name": "getAdInfo",
+          "outputs": [
+            {
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "adId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "publisherAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "publisherIpfs",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "publisherProject",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "network",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "location",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "x_size",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "y_size",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "mindate",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "maxdate",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "dau",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "minprice",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct AdManager.adInfo",
+              "name": "",
+              "type": "tuple"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_adId",
+              "type": "uint256"
+            }
+          ],
+          "name": "getAdStatus",
+          "outputs": [
+            {
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "adId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "clientAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "clientIpfs",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "adPrice",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "startTime",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "guaranteeTime",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "expireTime",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct AdManager.adStatus",
+              "name": "",
+              "type": "tuple"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getAllAdInfo",
+          "outputs": [
+            {
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "adId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "publisherAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "publisherIpfs",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "publisherProject",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "network",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "location",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "x_size",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "y_size",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "mindate",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "maxdate",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "dau",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "minprice",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct AdManager.adInfo[]",
+              "name": "",
+              "type": "tuple[]"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_adId",
+              "type": "uint256"
+            }
+          ],
+          "name": "getClientInfo",
+          "outputs": [
+            {
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "adId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "clientAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "clientIpfs",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "clientProject",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "clientDescription",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "paidETH",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct AdManager.clientInfo[]",
+              "name": "",
+              "type": "tuple[]"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getClientInfoByPublisher",
+          "outputs": [
+            {
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "adId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "clientAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "clientIpfs",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "clientProject",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "clientDescription",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "paidETH",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct AdManager.clientInfo[]",
+              "name": "",
+              "type": "tuple[]"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "name": "isPublisher",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "owner",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "name": "publisherId",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "_publisherIpfs",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "_publisherProject",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "_network",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "_location",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_x_size",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_y_size",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_mindate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_maxdate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_dau",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_minprice",
+              "type": "uint256"
+            }
+          ],
+          "name": "registerAd",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_adId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "_clientIpfs",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "_clientProject",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "_clientDescription",
+              "type": "string"
+            }
+          ],
+          "name": "registerClient",
+          "outputs": [],
+          "stateMutability": "payable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_adId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "_clientIpfs",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "_clientProject",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "_clientDescription",
+              "type": "string"
+            }
+          ],
+          "name": "registerOverClient",
+          "outputs": [],
+          "stateMutability": "payable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_publisher",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "_isActive",
+              "type": "bool"
+            }
+          ],
+          "name": "setPublisher",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        }
+      ]
+    }
+  }
+}
