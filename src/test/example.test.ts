@@ -66,6 +66,39 @@ describe("adManager contract test", () => {
     console.log(tx);
   });
 
+  it("Client : Register client", async () => {
+    const client1 = users[3];
+    const client2 = users[4];
+
+    const tx1 = await adManager
+      .connect(client1)
+      .registerClient(0, "https://ipfs.io/ipfs/QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN", "test 1", "test info", {
+        value: ethers.utils.parseEther("1.0"),
+      });
+    // contract에 console해서 이더 수량 파악하기
+    const receipt1 = await tx1.wait();
+
+    const tx2 = await adManager
+      .connect(client2)
+      .registerClient(0, "https://ipfs.io/ipfs/QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN", "test 1", "test info", {
+        value: ethers.utils.parseEther("1.0"),
+      });
+    // contract에 console해서 이더 수량 파악하기
+    const receipt2 = await tx2.wait();
+
+    console.log(receipt1.events);
+    const event = receipt1.events?.find((event) => event.event === "AdRegistered");
+    if (event) {
+      console.log("Event data:", event.args);
+    }
+  });
+
+  it("View : get client", async () => {
+    const tx = await adManager.getClientInfo(0);
+    console.log(`getClient Info`);
+    console.log(`${tx}`);
+  });
+
   after(async () => {
     await network.provider.send("evm_revert", [initialSnapshotId]);
   });

@@ -12,6 +12,7 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -24,10 +25,15 @@ interface AdManagerInterface extends ethers.utils.Interface {
     "adOn(uint256)": FunctionFragment;
     "ads(uint256)": FunctionFragment;
     "clientList(uint256,uint256)": FunctionFragment;
+    "getAdInfo(uint256)": FunctionFragment;
+    "getAllAdInfo()": FunctionFragment;
+    "getClientInfo(uint256)": FunctionFragment;
     "isPublisher(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "publisherId(address,uint256)": FunctionFragment;
     "registerAd(string,string,string,string,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "registerClient(uint256,string,string,string)": FunctionFragment;
+    "registerOverClient(uint256,string,string,string)": FunctionFragment;
     "setPublisher(address,bool)": FunctionFragment;
   };
 
@@ -36,6 +42,18 @@ interface AdManagerInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "clientList",
     values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAdInfo",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAllAdInfo",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getClientInfo",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "isPublisher", values: [string]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -59,6 +77,14 @@ interface AdManagerInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "registerClient",
+    values: [BigNumberish, string, string, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "registerOverClient",
+    values: [BigNumberish, string, string, string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setPublisher",
     values: [string, boolean]
   ): string;
@@ -66,6 +92,15 @@ interface AdManagerInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "adOn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ads", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "clientList", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getAdInfo", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getAllAdInfo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getClientInfo",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "isPublisher",
     data: BytesLike
@@ -76,6 +111,14 @@ interface AdManagerInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "registerAd", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "registerClient",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "registerOverClient",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "setPublisher",
     data: BytesLike
@@ -207,6 +250,91 @@ export class AdManager extends BaseContract {
       }
     >;
 
+    getAdInfo(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [
+          BigNumber,
+          string,
+          string,
+          string,
+          string,
+          string,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber
+        ] & {
+          adId: BigNumber;
+          publisherAddress: string;
+          publisherIpfs: string;
+          publisherProject: string;
+          network: string;
+          location: string;
+          x_size: BigNumber;
+          y_size: BigNumber;
+          mindate: BigNumber;
+          maxdate: BigNumber;
+          dau: BigNumber;
+          minprice: BigNumber;
+        }
+      ]
+    >;
+
+    getAllAdInfo(
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        ([
+          BigNumber,
+          string,
+          string,
+          string,
+          string,
+          string,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber
+        ] & {
+          adId: BigNumber;
+          publisherAddress: string;
+          publisherIpfs: string;
+          publisherProject: string;
+          network: string;
+          location: string;
+          x_size: BigNumber;
+          y_size: BigNumber;
+          mindate: BigNumber;
+          maxdate: BigNumber;
+          dau: BigNumber;
+          minprice: BigNumber;
+        })[]
+      ]
+    >;
+
+    getClientInfo(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        ([BigNumber, string, string, string, string, BigNumber] & {
+          adId: BigNumber;
+          clientAddress: string;
+          clientIpfs: string;
+          clientProject: string;
+          clientDescription: string;
+          paidETH: BigNumber;
+        })[]
+      ]
+    >;
+
     isPublisher(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
@@ -229,6 +357,22 @@ export class AdManager extends BaseContract {
       _dau: BigNumberish,
       _minprice: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    registerClient(
+      _adId: BigNumberish,
+      _clientIpfs: string,
+      _clientProject: string,
+      _clientDescription: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    registerOverClient(
+      _adId: BigNumberish,
+      _clientIpfs: string,
+      _clientProject: string,
+      _clientDescription: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setPublisher(
@@ -301,6 +445,85 @@ export class AdManager extends BaseContract {
     }
   >;
 
+  getAdInfo(
+    _adId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [
+      BigNumber,
+      string,
+      string,
+      string,
+      string,
+      string,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber
+    ] & {
+      adId: BigNumber;
+      publisherAddress: string;
+      publisherIpfs: string;
+      publisherProject: string;
+      network: string;
+      location: string;
+      x_size: BigNumber;
+      y_size: BigNumber;
+      mindate: BigNumber;
+      maxdate: BigNumber;
+      dau: BigNumber;
+      minprice: BigNumber;
+    }
+  >;
+
+  getAllAdInfo(
+    overrides?: CallOverrides
+  ): Promise<
+    ([
+      BigNumber,
+      string,
+      string,
+      string,
+      string,
+      string,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber
+    ] & {
+      adId: BigNumber;
+      publisherAddress: string;
+      publisherIpfs: string;
+      publisherProject: string;
+      network: string;
+      location: string;
+      x_size: BigNumber;
+      y_size: BigNumber;
+      mindate: BigNumber;
+      maxdate: BigNumber;
+      dau: BigNumber;
+      minprice: BigNumber;
+    })[]
+  >;
+
+  getClientInfo(
+    _adId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    ([BigNumber, string, string, string, string, BigNumber] & {
+      adId: BigNumber;
+      clientAddress: string;
+      clientIpfs: string;
+      clientProject: string;
+      clientDescription: string;
+      paidETH: BigNumber;
+    })[]
+  >;
+
   isPublisher(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
   owner(overrides?: CallOverrides): Promise<string>;
@@ -323,6 +546,22 @@ export class AdManager extends BaseContract {
     _dau: BigNumberish,
     _minprice: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  registerClient(
+    _adId: BigNumberish,
+    _clientIpfs: string,
+    _clientProject: string,
+    _clientDescription: string,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  registerOverClient(
+    _adId: BigNumberish,
+    _clientIpfs: string,
+    _clientProject: string,
+    _clientDescription: string,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setPublisher(
@@ -403,6 +642,85 @@ export class AdManager extends BaseContract {
       }
     >;
 
+    getAdInfo(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        BigNumber,
+        string,
+        string,
+        string,
+        string,
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
+        adId: BigNumber;
+        publisherAddress: string;
+        publisherIpfs: string;
+        publisherProject: string;
+        network: string;
+        location: string;
+        x_size: BigNumber;
+        y_size: BigNumber;
+        mindate: BigNumber;
+        maxdate: BigNumber;
+        dau: BigNumber;
+        minprice: BigNumber;
+      }
+    >;
+
+    getAllAdInfo(
+      overrides?: CallOverrides
+    ): Promise<
+      ([
+        BigNumber,
+        string,
+        string,
+        string,
+        string,
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
+        adId: BigNumber;
+        publisherAddress: string;
+        publisherIpfs: string;
+        publisherProject: string;
+        network: string;
+        location: string;
+        x_size: BigNumber;
+        y_size: BigNumber;
+        mindate: BigNumber;
+        maxdate: BigNumber;
+        dau: BigNumber;
+        minprice: BigNumber;
+      })[]
+    >;
+
+    getClientInfo(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      ([BigNumber, string, string, string, string, BigNumber] & {
+        adId: BigNumber;
+        clientAddress: string;
+        clientIpfs: string;
+        clientProject: string;
+        clientDescription: string;
+        paidETH: BigNumber;
+      })[]
+    >;
+
     isPublisher(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
     owner(overrides?: CallOverrides): Promise<string>;
@@ -424,6 +742,22 @@ export class AdManager extends BaseContract {
       _maxdate: BigNumberish,
       _dau: BigNumberish,
       _minprice: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    registerClient(
+      _adId: BigNumberish,
+      _clientIpfs: string,
+      _clientProject: string,
+      _clientDescription: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    registerOverClient(
+      _adId: BigNumberish,
+      _clientIpfs: string,
+      _clientProject: string,
+      _clientDescription: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -531,6 +865,18 @@ export class AdManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getAdInfo(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getAllAdInfo(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getClientInfo(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     isPublisher(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
@@ -555,6 +901,22 @@ export class AdManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    registerClient(
+      _adId: BigNumberish,
+      _clientIpfs: string,
+      _clientProject: string,
+      _clientDescription: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    registerOverClient(
+      _adId: BigNumberish,
+      _clientIpfs: string,
+      _clientProject: string,
+      _clientDescription: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setPublisher(
       _publisher: string,
       _isActive: boolean,
@@ -576,6 +938,18 @@ export class AdManager extends BaseContract {
     clientList(
       arg0: BigNumberish,
       arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getAdInfo(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getAllAdInfo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getClientInfo(
+      _adId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -604,6 +978,22 @@ export class AdManager extends BaseContract {
       _dau: BigNumberish,
       _minprice: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    registerClient(
+      _adId: BigNumberish,
+      _clientIpfs: string,
+      _clientProject: string,
+      _clientDescription: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    registerOverClient(
+      _adId: BigNumberish,
+      _clientIpfs: string,
+      _clientProject: string,
+      _clientDescription: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setPublisher(

@@ -150,4 +150,103 @@ contract AdManager {
 
         _idCounter++;
     }
+
+    function registerClient(
+        uint256 _adId,
+        string memory _clientIpfs,
+        string memory _clientProject,
+        string memory _clientDescription
+    ) public payable {
+        adInfo memory ad = ads[_adId];
+        require(msg.value >= ad.minprice, "Not enough ETH sent");
+
+        uint256 excess = msg.value - ad.minprice;
+        if (excess > 0) {
+            payable(msg.sender).transfer(excess);
+        }
+
+        clientInfo memory newClient = clientInfo({
+            adId: _adId,
+            clientAddress: msg.sender,
+            clientIpfs: _clientIpfs,
+            clientProject: _clientProject,
+            clientDescription: _clientDescription,
+            paidETH: msg.value - excess
+        });
+
+        clientList[_adId].push(newClient);
+
+        emit ClientRegistered(
+            newClient.clientAddress,
+            newClient.adId,
+            newClient.clientIpfs,
+            newClient.clientProject,
+            newClient.clientDescription,
+            newClient.paidETH
+        );
+    }
+
+    // purchase - 3
+    // 보다 높은 가격에 해당 광고 입찰
+    function registerOverClient(
+        uint256 _adId,
+        string memory _clientIpfs,
+        string memory _clientProject,
+        string memory _clientDescription
+    ) public payable {
+        adInfo memory ad = ads[_adId];
+        adStatus memory currentAd = adOn[_adId];
+
+        uint256 currentTime = block.timestamp;
+
+        require(currentAd.clientAddress != address(0), "Ad doesn't exist");
+        // require mindate 이후
+        require(currentAd.guaranteeTime <= currentTime, "Minimum guaranteed time hasn't passed");
+        // require maxdate 지나지 않음
+        require(currentAd.expireTime >= currentTime, "Ad already expired, call registerClient function");
+        // require 현재 가격 n% 이상
+        require((currentAd.adPrice * 110) / 100 <= msg.value, "Should register more value than +10%");
+
+        // 새 AdInfo 저장
+        clientInfo memory newClient = clientInfo({
+            adId: _adId,
+            clientAddress: msg.sender,
+            clientIpfs: _clientIpfs,
+            clientProject: _clientProject,
+            clientDescription: _clientDescription,
+            paidETH: msg.value
+        });
+
+        clientList[_adId].push(newClient);
+
+        emit ClientRegistered(
+            newClient.clientAddress,
+            newClient.adId,
+            newClient.clientIpfs,
+            newClient.clientProject,
+            newClient.clientDescription,
+            newClient.paidETH
+        );
+    }
+
+    // 모든 광고 정보
+    function getAllAdInfo() public view returns (adInfo[] memory) {
+        adInfo[] memory allAds = new adInfo[](_idCounter);
+
+        for (uint256 i = 0; i < _idCounter; i++) {
+            allAds[i] = ads[i];
+        }
+
+        return allAds;
+    }
+
+    // 특정 광고 정보
+    function getAdInfo(uint256 _adId) public view returns (adInfo memory) {
+        return ads[_adId];
+    }
+
+    // 특정 광고의 입찰 client 정보
+    function getClientInfo(uint256 _adId) public view returns (clientInfo[] memory) {
+        return clientList[_adId];
+    }
 }
