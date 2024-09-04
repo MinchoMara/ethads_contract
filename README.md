@@ -25,7 +25,7 @@
 ### Install
 
 ```
-git clone https://github.com/MinchoMara/mincho-mara-contract.git
+git clone git@github.com:MinchoMara/ethads_contract.git
 ```
 
 ### Contract Build
