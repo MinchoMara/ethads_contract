@@ -1,9 +1,9 @@
 <div align="center">
-  <h2>📔 Contract-Boilerplate 📔</h2>
+  <h2> EthAds </h2>
   <img width="300px" src="docs/logo.png" align="center">
   <p><br/></p>
-  <strong>Hardhat 스마트 컨트랙트 보일러플레이트</strong>
-  <p>본 레포지토리의 저작권은 블록체인 밸리 개발팀에게 있습니다.</p>
+  <strong>EthAds</strong>
+  <p></p>
 </div>
 
 <br/>
@@ -20,26 +20,24 @@
 <br/>
 <br/>
 
-## 주요 명령어
+## Key Functions
 
-### 설치
+### Install
 
 ```
-git clone https://github.com/Block-Chain-Valley/bv-contract-boilerplate.git
+git clone https://github.com/MinchoMara/mincho-mara-contract.git
 ```
 
-### 컨트랙트 빌드
+### Contract Build
 
 ```
 yarn build
 ```
 
-### 컨트랙트 테스트
+### Contract Test
 
 ```
-# 테스트 결과 출력
 yarn test
 
-# 테스트 결과 및 커버리지 결과 출력
 yarn coverage
 ```
