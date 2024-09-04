@@ -24,10 +24,14 @@ interface AdManagerInterface extends ethers.utils.Interface {
   functions: {
     "adOn(uint256)": FunctionFragment;
     "ads(uint256)": FunctionFragment;
+    "allowAd(uint256,address)": FunctionFragment;
+    "allowOverAd(uint256,address)": FunctionFragment;
     "clientList(uint256,uint256)": FunctionFragment;
     "getAdInfo(uint256)": FunctionFragment;
+    "getAdStatus(uint256)": FunctionFragment;
     "getAllAdInfo()": FunctionFragment;
     "getClientInfo(uint256)": FunctionFragment;
+    "getClientInfoByPublisher()": FunctionFragment;
     "isPublisher(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "publisherId(address,uint256)": FunctionFragment;
@@ -40,11 +44,23 @@ interface AdManagerInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "adOn", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "ads", values: [BigNumberish]): string;
   encodeFunctionData(
+    functionFragment: "allowAd",
+    values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "allowOverAd",
+    values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "clientList",
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getAdInfo",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAdStatus",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -54,6 +70,10 @@ interface AdManagerInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getClientInfo",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getClientInfoByPublisher",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "isPublisher", values: [string]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -91,14 +111,27 @@ interface AdManagerInterface extends ethers.utils.Interface {
 
   decodeFunctionResult(functionFragment: "adOn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ads", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "allowAd", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "allowOverAd",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "clientList", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getAdInfo", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getAdStatus",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getAllAdInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getClientInfo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getClientInfoByPublisher",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -235,6 +268,18 @@ export class AdManager extends BaseContract {
       }
     >;
 
+    allowAd(
+      _adId: BigNumberish,
+      _clientAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    allowOverAd(
+      _adId: BigNumberish,
+      _clientAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     clientList(
       arg0: BigNumberish,
       arg1: BigNumberish,
@@ -285,6 +330,31 @@ export class AdManager extends BaseContract {
       ]
     >;
 
+    getAdStatus(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [
+          BigNumber,
+          string,
+          string,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber
+        ] & {
+          adId: BigNumber;
+          clientAddress: string;
+          clientIpfs: string;
+          adPrice: BigNumber;
+          startTime: BigNumber;
+          guaranteeTime: BigNumber;
+          expireTime: BigNumber;
+        }
+      ]
+    >;
+
     getAllAdInfo(
       overrides?: CallOverrides
     ): Promise<
@@ -321,6 +391,21 @@ export class AdManager extends BaseContract {
 
     getClientInfo(
       _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        ([BigNumber, string, string, string, string, BigNumber] & {
+          adId: BigNumber;
+          clientAddress: string;
+          clientIpfs: string;
+          clientProject: string;
+          clientDescription: string;
+          paidETH: BigNumber;
+        })[]
+      ]
+    >;
+
+    getClientInfoByPublisher(
       overrides?: CallOverrides
     ): Promise<
       [
@@ -430,6 +515,18 @@ export class AdManager extends BaseContract {
     }
   >;
 
+  allowAd(
+    _adId: BigNumberish,
+    _clientAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  allowOverAd(
+    _adId: BigNumberish,
+    _clientAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   clientList(
     arg0: BigNumberish,
     arg1: BigNumberish,
@@ -478,6 +575,21 @@ export class AdManager extends BaseContract {
     }
   >;
 
+  getAdStatus(
+    _adId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, string, string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      adId: BigNumber;
+      clientAddress: string;
+      clientIpfs: string;
+      adPrice: BigNumber;
+      startTime: BigNumber;
+      guaranteeTime: BigNumber;
+      expireTime: BigNumber;
+    }
+  >;
+
   getAllAdInfo(
     overrides?: CallOverrides
   ): Promise<
@@ -512,6 +624,19 @@ export class AdManager extends BaseContract {
 
   getClientInfo(
     _adId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    ([BigNumber, string, string, string, string, BigNumber] & {
+      adId: BigNumber;
+      clientAddress: string;
+      clientIpfs: string;
+      clientProject: string;
+      clientDescription: string;
+      paidETH: BigNumber;
+    })[]
+  >;
+
+  getClientInfoByPublisher(
     overrides?: CallOverrides
   ): Promise<
     ([BigNumber, string, string, string, string, BigNumber] & {
@@ -627,6 +752,18 @@ export class AdManager extends BaseContract {
       }
     >;
 
+    allowAd(
+      _adId: BigNumberish,
+      _clientAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    allowOverAd(
+      _adId: BigNumberish,
+      _clientAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     clientList(
       arg0: BigNumberish,
       arg1: BigNumberish,
@@ -675,6 +812,29 @@ export class AdManager extends BaseContract {
       }
     >;
 
+    getAdStatus(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        BigNumber,
+        string,
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
+        adId: BigNumber;
+        clientAddress: string;
+        clientIpfs: string;
+        adPrice: BigNumber;
+        startTime: BigNumber;
+        guaranteeTime: BigNumber;
+        expireTime: BigNumber;
+      }
+    >;
+
     getAllAdInfo(
       overrides?: CallOverrides
     ): Promise<
@@ -709,6 +869,19 @@ export class AdManager extends BaseContract {
 
     getClientInfo(
       _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      ([BigNumber, string, string, string, string, BigNumber] & {
+        adId: BigNumber;
+        clientAddress: string;
+        clientIpfs: string;
+        clientProject: string;
+        clientDescription: string;
+        paidETH: BigNumber;
+      })[]
+    >;
+
+    getClientInfoByPublisher(
       overrides?: CallOverrides
     ): Promise<
       ([BigNumber, string, string, string, string, BigNumber] & {
@@ -859,6 +1032,18 @@ export class AdManager extends BaseContract {
 
     ads(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
+    allowAd(
+      _adId: BigNumberish,
+      _clientAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    allowOverAd(
+      _adId: BigNumberish,
+      _clientAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     clientList(
       arg0: BigNumberish,
       arg1: BigNumberish,
@@ -870,12 +1055,19 @@ export class AdManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getAdStatus(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getAllAdInfo(overrides?: CallOverrides): Promise<BigNumber>;
 
     getClientInfo(
       _adId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getClientInfoByPublisher(overrides?: CallOverrides): Promise<BigNumber>;
 
     isPublisher(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -935,6 +1127,18 @@ export class AdManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    allowAd(
+      _adId: BigNumberish,
+      _clientAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    allowOverAd(
+      _adId: BigNumberish,
+      _clientAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     clientList(
       arg0: BigNumberish,
       arg1: BigNumberish,
@@ -946,10 +1150,19 @@ export class AdManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getAdStatus(
+      _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getAllAdInfo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getClientInfo(
       _adId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getClientInfoByPublisher(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

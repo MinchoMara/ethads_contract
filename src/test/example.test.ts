@@ -99,6 +99,20 @@ describe("adManager contract test", () => {
     console.log(`${tx}`);
   });
 
+  it("Publisher : Allow client", async () => {
+    // allow ad 1
+    const publisher = users[0];
+    console.log(`publisher : ${publisher.address}`);
+    const tx = await adManager.connect(publisher).allowAd(0, users[3].address);
+
+    const receipt1 = await tx.wait();
+
+    const event = receipt1.events?.find((event) => event.event === "AdRegistered");
+    if (event) {
+      console.log("Event data:", event.args);
+    }
+  });
+
   after(async () => {
     await network.provider.send("evm_revert", [initialSnapshotId]);
   });

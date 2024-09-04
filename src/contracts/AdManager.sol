@@ -229,6 +229,117 @@ contract AdManager {
         );
     }
 
+    function allowAd(uint256 _adId, address _clientAddress) public onlyPublisher {
+        adInfo memory ad = ads[_adId];
+        clientInfo[] storage clients = clientList[_adId];
+
+        // require publisher = 해당 광고 id의 publisher
+        require(ad.publisherAddress == msg.sender, "Not the publisher");
+
+        uint256 currentTime = block.timestamp;
+        uint256 mindate = currentTime + ad.mindate * 1 days;
+        uint256 maxdate = currentTime + ad.maxdate * 1 days;
+
+        for (uint256 i = 0; i < clients.length; ) {
+            if (clients[i].clientAddress == _clientAddress) {
+                clientInfo memory client = clients[i];
+
+                // transfer ETH to publisher
+                payable(msg.sender).transfer(client.paidETH);
+
+                // turn on the Ad (adStatus)
+                adOn[_adId] = adStatus({
+                    adId: _adId,
+                    clientAddress: client.clientAddress,
+                    clientIpfs: client.clientIpfs,
+                    adPrice: client.paidETH,
+                    startTime: currentTime,
+                    guaranteeTime: mindate,
+                    expireTime: maxdate
+                });
+
+                emit AdPurchased(
+                    _adId,
+                    clients[i].clientAddress,
+                    clients[i].clientIpfs,
+                    ad.minprice,
+                    currentTime,
+                    mindate,
+                    maxdate
+                );
+                i++;
+            } else {
+                // 반환 other ETHs
+                payable(clients[i].clientAddress).transfer(clients[i].paidETH);
+                clients[i] = clients[clients.length - 1];
+                clients.pop();
+
+                continue;
+            }
+        }
+        return;
+        // revert("Client not found");
+    }
+
+    function allowOverAd(uint256 _adId, address _clientAddress) public onlyPublisher {
+        adInfo memory ad = ads[_adId];
+        adStatus memory currentAd = adOn[_adId];
+        clientInfo[] storage clients = clientList[_adId];
+
+        // require publisher = 해당 광고 id의 publisher
+        require(ad.publisherAddress == msg.sender, "Not the publisher");
+        require(currentAd.clientAddress != address(0), "Ad doesn't exist");
+
+        uint256 currentTime = block.timestamp;
+        uint256 mindate = currentTime + ad.mindate * 1 days;
+        uint256 maxdate = currentTime + ad.maxdate * 1 days;
+
+        for (uint256 i = 0; i < clients.length; ) {
+            if (clients[i].clientAddress == _clientAddress) {
+                clientInfo memory client = clients[i];
+
+                // transfer ETH to publisher
+                payable(msg.sender).transfer(client.paidETH);
+
+                // turn on the Ad (adStatus)
+                adOn[_adId] = adStatus({
+                    adId: _adId,
+                    clientAddress: client.clientAddress,
+                    clientIpfs: client.clientIpfs,
+                    adPrice: client.paidETH,
+                    startTime: currentTime,
+                    guaranteeTime: mindate,
+                    expireTime: maxdate
+                });
+
+                emit AdPurchased(
+                    _adId,
+                    clients[i].clientAddress,
+                    clients[i].clientIpfs,
+                    ad.minprice,
+                    currentTime,
+                    mindate,
+                    maxdate
+                );
+                i++;
+            } else {
+                if (clients[i].clientAddress == currentAd.clientAddress) {
+                    payable(currentAd.clientAddress).transfer(
+                        currentAd.adPrice *
+                            ((currentTime - currentAd.startTime) / (currentAd.expireTime - currentAd.startTime))
+                    );
+                } else {
+                    payable(clients[i].clientAddress).transfer(clients[i].paidETH);
+                }
+                clients[i] = clients[clients.length - 1];
+                clients.pop();
+
+                continue;
+            }
+        }
+        return;
+    }
+
     // 모든 광고 정보
     function getAllAdInfo() public view returns (adInfo[] memory) {
         adInfo[] memory allAds = new adInfo[](_idCounter);
@@ -248,5 +359,22 @@ contract AdManager {
     // 특정 광고의 입찰 client 정보
     function getClientInfo(uint256 _adId) public view returns (clientInfo[] memory) {
         return clientList[_adId];
+    }
+
+    // 해당 사용자가 보유한 모든 광고의 입찰 client 정보
+    function getClientInfoByPublisher() public view returns (clientInfo[] memory) {
+        uint256[] memory adIds = publisherId[msg.sender];
+        clientInfo[] memory allClients = new clientInfo[](adIds.length);
+
+        for (uint256 i = 0; i < adIds.length; i++) {
+            allClients[i] = clientList[adIds[i]][i];
+        }
+
+        return allClients;
+    }
+
+    // 특정 광고의 현재 구독 상태
+    function getAdStatus(uint256 _adId) public view returns (adStatus memory) {
+        return adOn[_adId];
     }
 }
